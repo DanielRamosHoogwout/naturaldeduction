@@ -52,7 +52,20 @@ unreachable and the tip jar hides.
 `npm run web:export` produces a plain static site — `index.html` plus a JS
 bundle — that drops onto Netlify, Vercel, Cloudflare Pages or GitHub Pages with
 no server. Nothing is platform-forked: the same screens, the same proof engine,
-the same level data. The only concession to the web is in `app/_layout.tsx`,
+the same level data.
+
+One deployment caveat: the router matches routes against the full pathname, so
+serving the site from a sub-path — a GitHub Pages project site at
+`user.github.io/naturaldeduction/`, for instance — makes every route miss and
+renders "Unmatched Route". Set the base path at build time when that applies:
+
+```ts
+// app.config.ts
+experiments: { baseUrl: '/naturaldeduction' },
+```
+
+Hosting at a domain root needs nothing.
+ The only concession to the web is in `app/_layout.tsx`,
 which caps and centres the app column above 520px so a phone layout does not
 stretch across a monitor. Progress lives in AsyncStorage, which is `localStorage`
 on the web, so each platform keeps its own.
